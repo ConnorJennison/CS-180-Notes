@@ -843,17 +843,228 @@ Solve for Thursday lecture.
 
 
 
+------
+
+# CS 180: Lecture 7								Thursday, Week 3								10/19/17
 
 
 
+### Graphs: Continued
+
+###### Connectivity
+
+All of the vertexes that can be reached in a grpah (nondirected) is called a **<u>connected component</u>**. Graphs can have several connected components, but the definition is more murky for directed graphs. We will define a strongly connected component to clear up our ambiguity for directed graphs. 
 
 
 
+**<u>strongly connected component</u>** - two points $a$ and $b$ are strongly connected if $\exists$ a path from $a$ to $b$ as well as a path from $b$ to $a$
+
+- The set of strongly connected components is a disjoint set
+- Any strongly connected component must be a cycle
 
 
 
+To find the strongly connected components, run BFS twice. Once on normal graph $G$, once on $G^r$ (reverse graph). 
 
 
+
+TL;DR: Components not very well defined for directed graphs. Strongly Connected Components very well defined. 
+
+
+
+### Paradigms: Greedy Paradigm
+
+Take a problem. Look at one or two items in the problem and make a decision very quickly without really haven't seen the entire problem. Once make decision you stick to it. 
+
+Ex: Bunch of numbers to sort. First we see number 5. Guess it's the second smallest one in the set. 
+
+Ex: Famous problem. We only considered two people, and made a decision right away. That is an example of a greedy decision. 
+
+Proving decision is optimal is a challenging task. 
+
+
+
+###### Problem: Scheduling Processorsr
+
+We have the scheduling problem we have done in the past, but instead we have $k$ processors that we can schedule these tasks on, so instead of throwing an overlapping task out, we schedule it on a different processor. 
+
+To solve this put the next ending task on the lowest available processor. Doing this actually minimizes the amount of processors we need to use. 
+
+Prove yourself (proof in beginning of chapter 4 to check). 
+
+
+
+### Shortest Path: Weighted Graphs
+
+Given a connected, weighted graph, and a starting vertext $s$, find the shortest path from $s$ to some point $c$. 
+
+- Only non-negative edges
+- Non-directed graph
+- Shortest path in terms of weights not length (number of edges)
+
+
+
+###### Solution
+
+Let's consider a greedy solution. We want to find the shortest path and stick to it. 
+
+- Choose the neighbors of $s$. Say that the shortest path between $s$ and a point $d$ is the weight of the edge between them, and don't change mind. 
+
+However, we can see that there can be a shorter path via two differenet edges with much smaller weight, so our greedy hypothesis was not good. Therefore, we can only make a greedy decision on the neighbor of $s$ with the minimum weight edge. 
+
+- Choose the neighbor of $s$ with minimum weight, lets say $d$ .  Say that the shortest path between $s$ and $d$ is the weight of the edge between them, and don't change mind. 
+
+Now we have the first step. We need to figure out the next step that works in the same manor. 
+
+- Consider all neighbors of verticies that we have finalized, and pick the one that has the shortest path to $s$ 
+
+Why does this work?
+
+- If there was another path that was shorter, then we would have to go through one of the other neighbors plus another nonnegative edge, and since our inductive greedy step considers the shortest path each time, then the other path must be longer. 
+
+This algorithm is known as **<u>Dikjstra's Shortest Path Algorithm</u>** 
+
+
+
+### Important Note: Analysis
+
+When analyzing algorithms, we need to do **<u>worst case analysis.</u>** We don't care how it can run on the best possible case, and for now we don't really care about average case, but we care about the longest possible time our algorithm can take. 
+
+
+
+------
+
+# CS 180: Discussion 2							Friday, Week 2								10/13/17
+
+### Topological Sort
+
+We can only apply topological sort on a **Directed Acyclic Graph**
+
+
+
+**Algorithm for Topological Sort**
+
+```
+1) find all sources (in-degree = 0), and add them to a queue
+2) for all elements in queue
+	a) print that element
+	b) reduce in-degree of each child by 1 (remove that edge)
+	c) if we reduce it to 0, add it to the queue
+	d) if we have no points left in queue and there are still points in graph, there was 		a cycle, return FAIL
+3) return the printed list of nodes. 
+```
+
+
+
+**Algorithm for Topological Sort using DFS**
+
+```
+1) For each initial source
+	a) Do DFS from source
+		b) when done processing a node, add to a stack
+```
+
+
+
+### Problem 1: Maximum Path Sum
+
+We are given a binary tree, where each node has a certain value assigned to it. Find the path in the tree such that thte sum of values along this path is maximal. A path is from root to leaf
+
+
+
+###### Algorithm: Recursive
+
+- Return the max(left path, right path) + root. 
+
+
+
+### Problem 2: BST 
+
+In a binary search tree, doing in-orer search gives us a list of roted number. The definition of a <u>successor</u> is as follows
+
+- Next greatest node
+- Next node given by in-order search
+
+Given a pointer to a certain node, find its successor. 
+
+Note: The rules of this tree allow us to travel up and down
+
+```c
+struct tree
+{
+  int value;
+  int* leftChild;
+  int* rightChild;
+  int* parent;
+};
+```
+
+
+
+###### Simple solution 
+
+- Do in-order search on the whole tree
+- Find our given node, and return the next element in the list. 
+
+Complexity: $O(n)$ 
+
+
+
+###### Better Solution
+
+- If our node has a right child
+  - Go down to the right, then as far left as you can, and return that value. 
+- If our node has no right child
+  - Go back up until  the current node we looking at on is a left child
+  - Go up one more and return that node. 
+
+Complexity : $O(log(n))$ for a balanced tree, worst case $O(n)$ for unbalanced tree
+
+
+
+### Problem 3: Building Unique BST
+
+We are given the in-order and pre-order printing results of a Binary Search Tree. Given both of these, construct a UNIQUE BST that satisfies both of these lists. 
+
+
+
+###### Solution
+
+- The first node in the pre-order list must be the root, so place it. 
+- For each element in the pre-order list
+  - find it in the in-order list
+  - Take left-and right of it
+  - Run recursively on left and right
+
+
+
+### Problem 4: Next Greater Element
+
+Given an array, find the next element that is greater than our current element. 
+
+
+
+###### Simple Solution
+
+- For each node, traverse the rest of the array and find the next largest node
+
+Complexity: $O(n^2)$ 
+
+
+
+###### Better Solution: Start from the Right, Use a Stack
+
+- Push last value on the stack
+- For each remaining value in the array
+  - Compare with top of stack
+    - If smaller than that value, put that value in new array
+    - If bigger than that value, pop value from stack and compare with next one until we can do it
+      - If stack is empty, put -1 for that element. 
+    - Push new value on stack
+
+
+
+------
 
 
 
