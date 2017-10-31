@@ -62,7 +62,6 @@ $$
 10 + 9 + \ldots + 1 = \sum_{k=1}^{10} k = \boxed{55}
 $$
 
-
 ------
 
 # CS 180: Lecture 2								Tuesday, Week 1							10/3/17
@@ -236,7 +235,6 @@ Does this algorithm solve the problem? <u>YES</u>. Let's prove it by contradicti
 - Now the first $i+1$ intervals between our solution and proposed optimal solution match
 - Continue this process through the $k_{th}$ interval 
 - Therefore, proposed optimal solution is now the same as our solution, and we have proved that our algorithm produces an optimal solution by contradiction. 
-
 
 
 ------
@@ -511,15 +509,85 @@ Assuming our graph is connected, and undirected, we have
 
 # **CS** 180: Lecture 5								Thursday, Week 2								10/12/17
 
+###### Note about Exams:
+
+- Disguising algorithms for new problems
+- Try problems on the FB page, see if you can get them
 
 
-### SICK FOR THIS LECTURE AND MISSED NOTES. IF YOU WANT NOTES HERE PLEASE SEND TO ME IN FOLLOWING WAY
 
-- ### FACEBOOK (Connor Jennison) 
+### Graphs
 
-- ### EMAIL (<connorjennison@me.com>) 
+Notation: $G = (V,E)$ 
 
-- ### ADD TO THE GITHUB REPO UNDER ISSUES TAB OR HOWEVER WORKS 
+- A graph with $V$ verticies and $E$ edges.
+
+We have also learned two graph serach methods: <u>BFS</u> and <u>DFS</u>. Both create a tree-like structure. We can use this fact when considering the following problem. 
+
+
+
+###### Finding a Shortest Simple Path
+
+Given a graph $G$  (non-weighted), we want to find the shortest path such that no vertex is revisted. It follows from our definition of BFS that we get the following therom. 
+
+###### Therom: Shortest Simple Path
+
+The length of the shortest path from a starting point, $s$, and an ending point, $x$, is $i$, where $i$ is the level of $x$ in the BFS tree.
+
+###### Proof
+
+Two counter-cases to consider
+
+1. $SP(s,x) > i$ (shotest path between s and x is greater than i)
+   - If $x$ is in $i$, then it was first visited from $i-1$
+   - If $x$ is in $i-1$, it was first visited by $i-2$ 
+   - ...
+   - If $x$ is in 1, it was first visited by 0
+   - Therefore, the distance between $s$ and $x$ is $i$ -> Contradiction
+2. $SP(s,x) < i$ 
+   - level # of 1$^{st}$ node from $s$ must be $1$, next must be two or less, subsequent node $j$ must be at level $j$ or less. 
+   - Lable of node is number on path from $s \rightarrow x$ 
+   - Inductive: node with label $j$ is at level $j$ or less
+   - $x$ is at level $i$ or less, which is a contradiction $\implies$ $x$ is at level $i$, and distance $i$ from $s$
+
+
+
+### Representing Graphs as Data Structures
+
+###### Matrix
+
+Given a Graph $G(V,E)$ with $n$ verticies and $e$ edges
+
+- represented by an $n$ x $n$ matrix, with each row and column representing a vertex
+- entry at $(a,b)$ is $1$ if $\exists$ an edge between verticies $a$ and $b$ and 0 if not
+  - If graph is non-directed, matrix is symmetric
+- $\implies n^2$ total entries
+- Good for dense graphs with many edges
+
+
+
+###### Linked List
+
+Given a Graph $G(V,E)$ with $n$ verticies and $e$ edges
+
+- Represent graph as an array of linked lists
+- Each node points to a linked list of the edges it is directed to
+- Add reverse edge for undirected graphs
+  - Every edge will appear twice
+
+
+
+###### BFS Search
+
+- Queue search
+  - "First in first out"
+
+
+
+###### DFS Search
+
+- Stack search
+  - "Last in First out"
 
 
 
@@ -590,9 +658,7 @@ def DFSStack(root)
     	for child in root.children:
     		check child 
     		add child to stack
-    		return DFSStack(child)
-    		
-    	
+    		return DFSStack(child)  	
 ```
 
 
@@ -765,15 +831,12 @@ Given these graphs, the problem of trying to sort these graphs is called **Topol
 
 The algorithm, known as **Kahn's Algorithm** is as follows
 
-```markdown
-#Kahn's Algorithm for topological sort
-
+```
 1) Choose a source
 2) Output the source
 3) Update in-degrees of all of the vertecies connected to the source
    a) If any of these become a source, add them to the source list
 4) Move back to step 1 and perform this recursively. 
-
 ```
 
 Now we will investigate the time complexity of this algorithm. Evaluate the inner loop of the algorithm
@@ -934,7 +997,7 @@ When analyzing algorithms, we need to do **<u>worst case analysis.</u>** We don'
 
 ------
 
-# CS 180: Discussion 2							Friday, Week 2								10/13/17
+# CS 180: Discussion 3							Friday, Week 3								10/20/17
 
 ### Topological Sort
 
@@ -1063,8 +1126,239 @@ Complexity: $O(n^2)$
     - Push new value on stack
 
 
+------
+
+# CS 180: Lecture 8								Tuesday, Week 4								10/24/17
+
+### MIDTERM NEXT TUESDAY:
+
+- Chapter 1 - Chapter 4 (not all of 4)
+- THIS LECTURE is cutoff for the midterm
+- Start studying now. 
+- Review session Thursday
+
+
+
+### Dijkstra's Shortest Path: Continued
+
+###### Time Complexity
+
+- Find the minimum in a list of the uninvestigated path lengths
+  - Inner Loop: $O(n)$ 
+- Update the weights of all verticies connected to the one we are. 
+  - Inner Loop: $O(n)$ 
+- How many times do we do these steps? Have to check all points accept first. 
+  - Outer loop: $O(n)$ 
+
+
+
+Dikjstra's Time Complexity: $O(n^2)$ 
+
+Is this optimal? Let's consider a new algorithm. 
+
+
+
+**MISSED AN ALGORITHM THAT RAN $O(e n^2)$ ** 
+
+To try to obtain minimum runtime, consider implementing this algorithm with a heap
+
+**<u>heap</u>**: a balanced binary tree such that for any subtree, the minimum of that subtree is the root.
+
+For each of the $e$ edges
+
+- Get the minimum value
+  - $O(1)$, minimum will always be the root
+- Heapify the tree 
+  - Compare the original two children, move the smaller one up
+  - Move down that node's child list and repeat recursively
+  - $O(log(n))$ 
+
+
+
+Therefore, this algorithm runtime is $O(elog(n))$, but is this the best?
+
+- Worst case: $e$ = $n^2$, so we have that worst case, this runs in $O(n^2 log(n))$ 
+- Dense graphs:
+  - Use first algorithm
+- Sparse graphs:
+  - Use heap algorithm
+
+    ​
+
+
+
+### Spanning Trees
+
+**<u>spanning tree (ST):</u>** a graph with the following properties
+
+- it is a tree
+- it has the minimum number of edges ($n-1$ assuming graph has $n$ verticies)
+- it spans/touches every vertex
+
+How do we find a spanning tree?
+
+- Trivial: Just run DFS
+
+To make this more interesting, consider a different kind of spanning tree
+
+**<u>minimum spanning tree (MST):</u>** a spanning tree such that it has minimum weight
+
+We want to come up with an algorithm that determines the minimum spanning tree of a graph. To do this, we will state a very useful therom that we will use
+
+
+
+###### Minimum Spanning Tree Therom
+
+Take a graph, and split it into two partitions that has the following properties
+
+- The two partitions are disjoint
+- Each of the two partitions is non-empty
+- All points in the graph are in either of two partitions
+
+Consider all edges between partition 1 and partition 2, and denote the minimum weighted edge $e_{min}$. 
+
+Then $\exists$ a Minimum Spanning Tree that includes $e_{min}$. 
+
+
+
+Before we prove this therom, let's consider a couple algorithms that apply it
+
+
+
+###### Prim's MST Algorithm
+
+```
+• Given a graph G, n verticies, e edges. Assume MST exists
+• Create two partitions
+	- L: contains an arbitary vertex
+	- R: contains all other verticies
+• While there are still verticies in R
+	- Find the minimum edge between L and R, denoted as e[min]
+	- Move e[min] into list for MST
+	- Take vertex connected to e in partition R, and move it to partition L
+```
+
+
+
+Similarly to Dijkstra's, we get complexity $O(n^2)$ or $O(elog(n))$ depending on the implementation
+
+
+
+###### Kruskal's MST Algorithm
+
+```
+• Given a graph G, n verticies, e edges, Assume MST exists
+• Sort all the edges by weight in non-decreasing order
+• While there are less than (n-1) edges in the MST
+	- Consider the minimum edge that has not been considered
+	- If including this edge in the MST creates a cycle
+		* Discard and move on
+	- Else including this edge in MST doesn't create cycle
+		* Add to MST and move to next edge
+```
+
+
+
+
+
+
 
 ------
 
+# CS 180: Lecture 9								Thursday, Week 4								10/26/17
+
+### Spanning Trees cont...
+
+Last time we stated the MST Therom and used it a couple of times, but we have yet to formally prove it. Now we will do that
+
+###### Minimum Spanning Tree Therom
+
+Take a graph, and split it into two partitions that has the following properties
+
+- The two partitions are disjoint
+- Each of the two partitions is non-empty
+- All points in the graph are in either of two partitions
+
+Consider all edges between partition 1 and partition 2, and denote the minimum weighted edge $e_{min}$. 
+
+Then $\exists$ a Minimum Spanning Tree that includes $e_{min}$. 
 
 
+
+###### Proof
+
+Assume by contradiction that we have a Minimum Spanning Tree that does not include $e_{min}$. We call this tree $T'$. Split the graph into two partitions such that $e_{min}$ is one of the edges in the gap. Since this isn't the optimal tree, there must be another edge that goes between these two partitions, $e_x$. Consider the graph created by $T' \cup e_{min}$. Then we are guaranteed to have a cycle, because we now have $n$ edges with $n$ verticies, and two of the edges in the introduced cycle must be $e_{min}$ and $e_x$ for some edge in between them. If we replace $e_x$ in our tree with $e_{min}$ and consider  $T' \cup e_{min} - e_x$, then we will have a tree that is more optimal than our first tree, so we have a contradiction. 
+
+
+
+## CUTOFF FOR MIDTERM 1
+
+
+
+### Disjoint Set (Union-Find) Structure
+
+We know how to do Kruskal's algorithm, but representing it as a data structure is not trivial. How can we best represent the graph to simplify Kruskal's algorithm the most? Consider the following problem. 
+
+We are given a bunch of numbers/nodes. We are allowed two operations in this problem
+
+- Union
+  - Take a vertex, and take another vertex, and find their union
+- Find
+  - Take two verticies, and see if they belong to the same group. 
+
+A problem of this kind is called a **Union-Find Problem** 
+
+How do we structure this?
+
+1. Series of linked lists representing a union
+   - Find: $O(n)$
+   - Union: $O(1)$
+2. All Elements in Union Point to Same Point
+   - Find: $O(1)$ 
+   - Union: $O(n)$ 
+3. **Balanced Binary Search Trees**
+   - Find: $O(log(n))$ (complexity of search in binary tree)
+   - Union: $O(1)$ (just point the top of the smaller tree to the larger tree)
+
+
+
+We can clearly see that number 3 is the best implementation of this type of structure. Now how does this apply to Kruskal's algorithm so we can simplify it?
+
+
+
+- To add the smallest edge in our tree
+  - Create a union between the two verticies
+- What if we try to add an edge that will create a cycle
+  - Use a find operation to see wether or not the two edges are in the same group
+  - If they are, do not add to union, it would create a cycle. 
+
+
+
+### Clustering
+
+We are given a graph $G$. Our goal is to create $k$ clusters such that
+
+- The distance between clusters is large
+- The distance between verticies within the same cluster is small. 
+
+To do this problem we want to group things together that have short edges, similar to what we do in Kruskal's algorithm, so for this algorithm we might want to take a similar approach that we took then. 
+
+
+
+What we can do is perform Kruskal's until we have the $k$ clusters required, then stop. This is actually an optimal solution. Because of the way we choose edges in Kruskal's, if we had another group of clusters that we claim is more optimal, there would be a clustering we have in Kruskal's that would be split into two, but because Kruskal chooses shortest edges first, then the distance between the two clusters in the proposed optimal solution is shorter, so the solution is less optimal, and we have a contradiction. 
+
+
+
+------
+
+# 
+
+### 
+
+
+
+
+
+
+
+###### 
