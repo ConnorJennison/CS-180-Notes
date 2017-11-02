@@ -590,7 +590,6 @@ Given a Graph $G(V,E)$ with $n$ verticies and $e$ edges
   - "Last in First out"
 
 
-
 ------
 
 # CS 180: Discussion 2							Friday, Week 2								10/13/17
@@ -1351,14 +1350,150 @@ What we can do is perform Kruskal's until we have the $k$ clusters required, the
 
 ------
 
-# 
+# CS 180: Lecture 10								Tuesday, Week 5								10/31/17
 
 ### 
 
+### MIDTERM EXAM NO LECTURE
 
 
 
+------
+
+# CS 180: Lecture 11								Tuesday, Week 5								11/2/17
+
+### Divide and Conquer
+
+The basic premise of this is that we will take a problem, split it into two smaller problems, and solve those problems recursively. This is very common and applys to many different problems, especially sorting. 
 
 
 
-###### 
+###### Sorting: Merge Sort
+
+We are given an array we want to sort
+
+11	9	3	8	1	4	12	2
+
+Divide in conquer breaks down the list into different sublists, and then solve the problem for smaller
+
+
+
+11	9	3	8						1	4	12	2
+
+11	9			3	8			1	4			12	2
+
+11		9		3		8		1		4		12		2
+
+
+
+So now each sublist is sorted since it only has 1 element, so now we will go back up the groups, each time merging the sorted subgroups into a group. 
+
+
+
+9 	11			3	8			1	4			2	12
+
+
+
+###### Merging
+
+Now when we need to merge two lists, we do the following method
+
+- Given: two sorted arrays, A and B, Output: A sorted array C that merges A and B
+- Have two pointers, one pointing to A[0], one pointing to B[0]
+- While both pointers are not at the end
+  - Compare the two values at those two pointers
+  - Take the smaller one, add it to C, and increment that pointer
+
+**NOTE: BOTH LISTS NEED TO BE SORTED TO APPLY MERGE**
+
+
+
+Now lets apply this to finish our problem
+
+3	8	9	11				1	2	4	12
+
+1	2	3	4	8	9	11	12
+
+
+
+###### Time Complexity of Merging
+
+Method 1:
+
+- For each value in A, we will consider a value in B at most $n$ times (assuming size of B is $n$ and size of A is $m$). 
+- Therefore, this algorithm is $O(mn)$ ~ $O(n^2)$ 
+- Can do better. Instead of charging time complexity to value in A or B, consider a value in the output
+  - *How long does it take to get a value $k$ in the output?*
+
+
+
+Method 2: 
+
+- For each value $k$ in the output, we will do $m+n$ comparisons max
+- Therefore, merging is $O(m+n)$ 
+
+**Make sure analysis is the best it can be before redoing an algorithm** 
+
+###### Time Complexity of MergeSort
+
+Breaking down the steps we have the following facts 
+$$
+T(n) = 2 T(\frac{n}{2}) + cn 
+\\
+T(\frac{n}{2}) = 2 T( \frac{n}{4}) + \frac{cn}{2}  \implies T(n) = 2^2 T( \frac{n}{2^2}) + \frac{cn}{2}]+ cn 
+\\
+\vdots 
+\\
+T(n) = 2^i T(\frac{n}{2^i}) + icn
+$$
+We know eventually that this will become constant time, because we will break down the equation into lists with 1 element, so eventually we will have $T(1)$, therefore
+$$
+\frac{n}{2^i} = 1 \implies 2^i = n \implies \boxed{i = log(n)}
+$$
+Therefore, our formula becomes the following
+$$
+T(n) = 2^{logn}T(1) + log(n) cn   = cnlog(n) \implies \boxed{O(nlog(n))}
+$$
+
+
+######Graph Crossing Problem (pg. 224/225)
+
+We are given a graph and we want to output the pairs of lines that cross
+
+- For each line, check to see if it crosses each other line
+- $O(n^2)$
+
+We probably can't do better than $O(n^2)$ for this. What if we changed the problem though. Now, we only want to output *the number* of crossings. How can we use Divide and Conquer in order to solve this?
+
+We basically will run mergesort, but each time we will count the number of inversions in each half. During the merge element, we do the following step
+
+- Maintain pointers to the beginning of each list $A$ and $B$ 
+- Which pointer points to smaller element
+  - If pointer in $B$, add it to list, and add number of elements left in $A$ to be considered to $SUM$. 
+  - If pointer in $A$, add it to list. 
+
+
+
+###### Binary Search
+
+Use divide and conquer to calculate the rutime of Binary search
+$$
+T(n) = T(\frac{n}{2}) + c
+\\
+T(\frac{n}{2}) = T(\frac{n}{4}) + c \implies T(n) = T(\frac{n}{4}) + 2c
+\\
+\vdots
+\\
+T(n) = T(\frac{n}{2^i})  + ic
+$$
+Like before, we have the following
+$$
+\frac{n}{2^i} = 1 \implies 2^i = n \implies \boxed{i = log(n)}
+$$
+Therefore, as expected, binary search runs in $\boxed{O(log(n))}$ time. 
+
+
+
+###### Closest Pair of Points (pg. 226)
+
+We will go over again Tuesday, read book for review/preview. 
