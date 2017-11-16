@@ -1191,7 +1191,7 @@ Therefore, this algorithm runtime is $O(elog(n))$, but is this the best?
 **<u>spanning tree (ST):</u>** a graph with the following properties
 
 - it is a tree
-- it has the minimum number of edges ($n-1$ assuming graph has $n$ verticies)
+- it has the minimum number of edges ($n-1​$ assuming graph has $n​$ verticies)
 - it spans/touches every vertex
 
 How do we find a spanning tree?
@@ -1360,7 +1360,7 @@ What we can do is perform Kruskal's until we have the $k$ clusters required, the
 
 ------
 
-# CS 180: Lecture 11								Tuesday, Week 5								11/2/17
+# CS 180: Lecture 11								Thursday, Week 5								11/2/17
 
 ### Divide and Conquer
 
@@ -1497,3 +1497,157 @@ Therefore, as expected, binary search runs in $\boxed{O(log(n))}$ time.
 ###### Closest Pair of Points (pg. 226)
 
 We will go over again Tuesday, read book for review/preview. 
+
+
+
+------
+
+# CS 180: Lecture 12								Tuesday, Week 6								11/7/17
+
+Absent
+
+
+
+------
+
+# CS 180: Lecture 13								Thursday, Week 6								11/9/17
+
+### Dynamic Programming
+
+###### Introduction
+
+For divide and conquer, we split the problem into two (usually) disjoint subsets to solve the problem. We will now introduce a new method known as **dynamic programming**. This method has a couple of major key differences from divide and conquer
+
+- We split the problem into multiple subsets
+- The subsets are not necessarily disjoint
+- For each subproblem, we get an optimal solution, then combine these to get a solution to the problem as a whole. 
+  - Continue to do this recursively until each subproblem is small enough
+
+Divide and conquer can be difficult to understand, but once you understand it it becomes a very powerful tool to use. 
+
+
+
+###### Weighted Interval Scheduling (pg. 252)
+
+Same interval scheduling problem as before. We are given a bunch of intervals, however this time each interval has a certain weight that corresponds to it. Our goal is to find the schedule such that we maximize the total weight of the schedule and that none of the intervals are overlapping. 
+
+
+
+We start with a couple of assumptions
+
+- Up to a certain coordinate $x_i$, we must know the optimal solution from the beginning to $x_i$ 
+- For any $x_j < x_i$, we must know the optimal solution from the beginning to $x_j$ 
+
+
+
+If there is an interval $I_j$ such that it overlaps and goes past $x_j$ then we compute two assumptions
+
+- $I_j \notin S$ (solution)
+  - $S_j = S_{j-1}$ 
+
+
+- $I_j \in S$
+  - $S_k = S_{l_{j}} + w_j$ 
+  - $S_{l_j}$ refers to the solution at $x_i$, the first ex coordinate before the beginning of $j$ 
+
+We store all of the tentative solutions that we build up, and once we get to the end, we backtrack to find the optimal solution. 
+
+
+
+###### Knapsack Problem (pg. 267)
+
+We are given a knapsack with size $S$. We have many items of different values, and sizes: $I_k = (s_k, v_k)$. There is an unlimited amount of each of the given items. Our goal is to place items in the knapsack such that we have the maximum size.
+
+
+
+What parameters do we have that we can use dynamic programming on
+
+- Number of items
+- Size of knapsack
+
+
+
+We have a table below that shows the Size of the knapsack against which items we are considering. We want to use dynamic programming to fill out each cell. 
+
+|                   | **S = 1** | **S = 2** | **S = 3** | **S = 4** | **S = 5** |
+| :---------------: | :-------: | :-------: | :-------: | :-------: | :-------: |
+|    **Item 1**     |           |           |           |           |           |
+|  **Items 1, 2**   |           |           |           |           |           |
+| **Items 1, 2, 3** |           |           |           |           |           |
+
+
+
+In our algorithm, we will fill 
+
+- For item $j$, for knapsack size $i$ 
+  - Item $j \in S$
+    - Denote $v_x$ as the value at item $j$, index $i - S_j$ 
+    - $S_{i,j} = v_x + v_j$ 
+  - Item $j \notin S$
+    - $S_{i,j} = $ $S_{i,j-1}$
+  - Take $S_{i,j}$ as the maximum of these two values. 
+- Eventually, we will have the value for all items and knapsack size $S$ 
+- The comparisons in each value of the array take constant time, so for this algorithm we have $O(nC)$ 
+  - This is not polynomial because we have two different variables that the order depends on, but we could have, for example, $C = 2^n$ 
+  - We call functions of this type **pseudo-poynomial**. 
+
+
+
+------
+
+# CS 180: Lecture 15								Thursday, Week 7								11/16/17
+
+### Dynamic Programming cont...
+
+###### Segmented Least Squares: Multi-way choices (pg. 261)
+
+Let's say we have a set of points in 2-D, and we want to approximate the points with a straight line. The straight line will attempt to minimize some error function $E$. In some cases, we possibly cannot do a good linear estimation with just one line, so in this case we are allowed to do multiple line segments. 
+
+- Consider if we chose $n$ line segments, we would have zero error, but problem would be complex
+- If we chose $1$ line segment, we would have large error, even though the problem is simple
+
+What is the right approach. Let us denote a cost function that we look to minimize:
+$$
+C = \lambda l + S_1
+$$
+Where $l$ denotes the number of lines (multiplied by a constant $\lambda$), and $S_1$ is the error function. Let's use dynamic programming to solve
+
+- Assume points are sorted by increasing $x$ 
+
+
+- Assume that we know the optimal solution for the first $i$ points
+- When considering the optimal solution for the first $i+1$ points, we have two choices
+  - We do not add a new line for the $i+1$ point. Just extend the line that goes through point $i$ 
+  - We are going to add a new line in this instance
+    - $\forall k < i+1$
+      - add a new line segment from $k$ to $i+1$ in the optimal solution up to $k$ points
+    - compute the error of all of these lines, and take the line that has the smallest error
+    - $O(n^2)$ because we have $n$ error calculations to do when finding a line/error and $n$ lines at most
+  - Calculate the cost function in each instance, and take the smaller of the two as the optimal solution up to $i+1$ points. 
+
+
+
+Algorithm runs in $O(n^3)$ time. Computing each optimal line addition is $O(n^2)$ time, and we do this $n$ times for a total of $O(n^3)$. 
+
+
+
+###### Subsequence Problem
+
+We are given a sequence of <u>unique</u> integers. We define the following
+
+- A subsequence is <u>increasing</u> if for all $i,j$ in the subsequence such that $i < j$, $S_i < S_j$ 
+- A subsequence is <u>contiguous</u> if all elements in the subsequence are adjacent and in the same order as in the regular sequence
+
+Find the largest increasing subsequence (not necesarrily contiguous)
+
+
+
+Assume that for each of the first $i$ elements of the sequence, we know the optimal solution. We now want to find the optimal solution for the first $i+1$ points. We have two cases to consider
+
+- $x_{i+1}$ is not in the solutions
+  - the optimal solution up to $x_i$ is the same as the optimal solution up to $x_{i+1}$ 
+- $x_{i+1}$ may be in the solution
+  - for each of the the optimal soutions at $x_k$ in  $x_1, \ldots, x_i$ 
+    - if $x_{i+1} > x_k$ 
+      - add 1 to the solution corresponding to $x_k$ 
+  - denote the optimal solution in this case as the 
