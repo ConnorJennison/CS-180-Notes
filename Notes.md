@@ -1592,7 +1592,6 @@ In our algorithm, we will fill
   - We call functions of this type **pseudo-poynomial**. 
 
 
-
 ------
 
 # CS 180: Lecture 15								Thursday, Week 7								11/16/17
@@ -1650,4 +1649,175 @@ Assume that for each of the first $i$ elements of the sequence, we know the opti
   - for each of the the optimal soutions at $x_k$ in  $x_1, \ldots, x_i$ 
     - if $x_{i+1} > x_k$ 
       - add 1 to the solution corresponding to $x_k$ 
+
   - denote the optimal solution in this case as the 
+
+    ​
+
+------
+
+# CS 180: Lecture 17								Thursday, Week 9							11/30/17
+
+### Network Flow
+
+The runtime of Ford-Fulkerson is $O(e|f|)$
+
+- There are at MOST $2e$ edges in the residual graph
+- $|f|$ corresponds to the total amount of flow in the graph
+
+This is psuedo-polynomial as of now, if edges have a very large capacity this could take a long time
+
+
+
+Reminder: a **bipartite graph** is a graph where the nodes can be split between two disjoint groups, $A$ and $B$ such that every edge travels from $a_i \in A$ to $b_i \in B$ 
+
+
+
+###### Matching Problem
+
+Given a bipartite graph, find the maximum number of matches. This is a difficult problem, but when we consider this as a bipartite graph the problem is a little easier. We can model the bipartite graph as a network flow problem in orer to solve this
+
+- Given two bipartite groups, $A$ and $B$ 
+- Direct all edges from $A$ to $B$ 
+- Create a source, $s$, and create an edge $(s,a_i)$ for each $a_i \in A$ 
+- Create a sink, $t$, and create an edge $(b_i,t)$ for each $b_i \in B$ 
+- Every edge has capacity 1
+- Find max-flow using Ford-Fulkerson, max-flow corresponds to maximum matches
+
+You can see how network flow transforms the problem, into one that is not only solvable, but also efficient. Since all of the capacities are 1, this problem will run at $O(n^2)$ 
+
+
+
+
+
+Many of the problems relating to network flow are about **transforming the problem** to a network flow problem, solving that, and showing that the solution to the network flow problem is the same as the solution to the original problem. 
+
+
+
+###### Cell-Phone Problem
+
+Suppose we have a collection of cell phone towers. At a given time, we have a collection of different cell phones that want to talk to each other. Each of the base stations have a certain capacity. Assume that the capacity of every base station is $C$. A phone can be connected to the base station if it is a distance of $R$ or less. Find the maximum number of phones that can be connected to the base station system. 
+
+Again we utilize network flow to solve this. The algorithm is as follows
+
+- Split graph into two bipartite sets
+  - $C$ for the set of cell phones
+  - $B$ for the set of base stations
+- Direct all edges in $C$ to their respective destinations in $B$
+- Create a source, $s$, and direct source to each cell phone
+- Create a sink, $t$, and direct each base station to it.
+- Update capacities of all edges
+  - Edges from $s$ to a cell-phone have a capacity 1
+  - If a cell-phone is less than distance $R$ from a towers, ad a directed edge of capacity 1 between them
+  - Edges from a base station to $t$ have capacity of $C$ 
+- Run Fork-Fulkerson, and the max flow is the answer
+
+
+
+------
+
+# CS 180: Discussion 9							Friday, Week 9								12/1/17
+
+###### <u>Problem 1: Longest Consecutive Subsequence</u>
+
+Ex: Given a sequence: {1,9,3,10,4,20,2}. Longest consecutive subsequence is: 1,3,4,2 (order does not matter). Find an algorithm that finds the longest consecutive subsequence
+
+A natural upper-bound to this problem is $O(nlog(n))$, because if we sort the sequence, then the solution to the problem is fairly trivial. This gives us the intuition that we want to solve this problem in $O(n)$ time. 
+
+We obtain a linear time solution by doing the following
+
+- Put all numbers in a hash map
+- For each number $n$  in a sequence
+  - If the number $n-1$ is also in the sequence, ignore this case
+  - Else, this begins some consecutive subsequence, keep looking for greater values and note how long subsequence is
+
+
+
+General strategies to take away from this problem for interviews
+
+- In the beginning, try to come up with a trivial upper bound solution to get an idea of what your solution should be
+- Try to make code that is simple
+
+
+
+###### <u>Problem 2: Sorted Rotated Array</u>
+
+We are given a sorted array $A$ that is rotated to the right by $k$ places. Find an efficient algorithm to see how many places the array was rotated/find the minimum
+
+
+
+Upper bound solution: $O(n)$ 
+
+- Traverse the array and fnd when the number decreases
+
+
+
+This suggests that we want to find the solution in $O(log(n))$ time, which would suggest that we probably want to use binary search to some extent. The intuition for performing binary search on this problem is as follows. 
+
+- While we haven't found the number
+  - Call our current search partition of the array $A_i$, center point $a_c$, beginning $a_1$, end $a_k$ 
+  - If $a_c < a_1$, define new $A_i$ on left half, redefine center,beginning, and end points
+  - Else if $a_c > a_k$, define new $A_i$ on right half, redifine center/beginning/end points
+  - Else, array is already in sorted order, no rotation happened. 
+
+
+
+###### <u>Problem 3a: All Permutations</u>
+
+Given a set of numbers, generate all permutations of these numbers. 
+
+The solution to this algorithm is known as **Heap's Algorithm for Generating Permutations**. The basics of this algorithm are as follows
+
+- Start by building all permutations for the list of size 1
+- Keep adding elements one by one, adding them in all possible slots for each of the permutations
+
+Runtime: $O(n! * n)$ 
+
+
+
+###### <u>Problem 3b: Finding next sorted permutation</u>
+
+Given a permutation $p$, find what would be the next permutation in sorted order
+
+- Find the longest increasing sequence from the right of the permutation
+- Change the number directly to the left of this sequence with the first number in the sequence that is greater
+- Reverse the sequence
+
+Ex: 
+$$
+3,2,4,1 \rightarrow 3,4,2,1 \rightarrow 3,4,1,2
+$$
+Ex:
+$$
+2,5,4,6,3,1 \rightarrow 2,5,6,4,3,1 \rightarrow 2,5,6,1,3,4
+$$
+
+
+###### <u>Problem 4: Merge k sorted lists</u>
+
+We have $N$ sorted lists of size $k_1, k_2, \ldots, k_n$. Merge these sorted lists.
+
+Trivial algorithm:
+
+- Have pointers in each list that track where we are
+- Compare all pointers until we find the minimum
+- Advance that pointer then continue until we are done
+
+Time complexity of trivial algorithm is $O(N * \sum k_i)$. We can see that the bottleneck of this operation is the $N$ comparisons that we do when finding the minimum. Luckily, we have a great data structure we can use that easilly finds the minimum: a **heap**
+
+
+
+The following algorithm uses a heap in order to make this problem easier
+
+- Have pointers in each list that tracks where we are
+- Add all of these pointers to a heap
+- While we are not done
+  - Take the minimum from the top
+  - Advance that pointer, and add the new pointer/value to the heap
+  - Re-heapify
+
+Now, this brings the time complexity of the problem to $O(log(N) * \sum k_i)$ because of the following
+
+- Finding the minimum in the heap is constant time (it's always at the top)
+- Re-Heapifying is $O(log(N))$ 
+
