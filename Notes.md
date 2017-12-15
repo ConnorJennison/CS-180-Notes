@@ -463,7 +463,7 @@ Rules:
 - We must go over every edge and touch every vertex
 - We cannot go over an edge twice
 
-We are able to do this if and only if $\exists$ 2 or less vertexes with an odd number of edges attatched to it. Graphs that meet this quality are called **Eulerian graphs**. 
+We are able to do this if and only if $\exists​$ 2 or less vertexes with an odd number of edges attatched to it. Graphs that meet this quality are called **Eulerian graphs**. 
 
 
 
@@ -1254,6 +1254,8 @@ Similarly to Dijkstra's, we get complexity $O(n^2)$ or $O(elog(n))$ depending on
 		* Discard and move on
 	- Else including this edge in MST doesn't create cycle
 		* Add to MST and move to next edge
+		
+O(elogv) assuming given sorted edges)
 ```
 
 
@@ -1713,7 +1715,6 @@ Again we utilize network flow to solve this. The algorithm is as follows
 - Run Fork-Fulkerson, and the max flow is the answer
 
 
-
 ------
 
 # CS 180: Discussion 9							Friday, Week 9								12/1/17
@@ -1821,3 +1822,57 @@ Now, this brings the time complexity of the problem to $O(log(N) * \sum k_i)$ be
 - Finding the minimum in the heap is constant time (it's always at the top)
 - Re-Heapifying is $O(log(N))$ 
 
+
+
+
+------
+
+# CS 180: Lecture 19								Thursday, Week 10							12/7/17
+
+### Problem Transormation
+
+###### <u>General:</u>
+
+We have the definition $ y \le_p x$, from which we can derive a couple of different things. 
+
+- $x$ is at least as hard as $y$ 
+- if $y$ is NP-HARD, so is $x$
+- if $x$ can be solved in polynomial time, so can $y$ 
+
+
+
+We start from an NP-Hard problem $y$ and show $x$ is NP-Hard. Show that an arbitrary instance of $y$ can be solved by a "black-box" that solves $x$. 
+
+
+
+###### <u>Example:</u>
+
+A **vertex cover** is defined as a minimum set of verticies $VS$  in a graph $G$ such that every edge $e$ has at least one end in $VC$. PROV
+
+
+
+###### Prove: $S$ is a maximum independent set if and only if $V-S$ is a vertext cover.
+
+If $S$ is a maximum independent set, then consider an arbitrary edge $(u,v)$ in the graph. Either $u$, $v$ or both must be in $V-S$, because both of them can't be in $S$. This follows for every edge, so we have that $V-S$ is a vertex cover. 
+
+ If $V-S$ is a vertex cover, then consider two nodes, $u,v \in S$. If they were joined by an edge $e$, then neither of them would be in $V-S$, contradicting the fact that it is a vertex cover. Therefore, no two nodes in $S$ share an edge, and S is a Maximum Independent Set
+
+
+
+###### <u>Showing NP-Complete:</u>
+
+Now we will show that $MIS \le_p VC$ 
+
+We start from an arbitrary instance of $MIS$ and show that a blackbox that can solve $VC$ can solve $MIS$. Because of the infromation in the previous example, we can do this transformation. 
+
+
+
+###### <u>NP-Completeness with Set Covers:</u>
+
+Consider a set $U = \{x_1, \ldots, x_n\}$ and a collection of subsets $S_1, \ldots, S_n$. The goal of the **<u>set cover problem</u>** is to find a minimum set of $S_i$ such that their union is $U$. 
+
+
+
+###### Prove: $VC \le_p SC$ 
+
+Show that an arbitrary instance of $VC$ can be solved using a solution to $SC$. This is a farily simple transformation. We just define the set $U$ as the set of all edges to be covered, and each of the subsets represents one node, and its contents is how many edges are in that set. 
