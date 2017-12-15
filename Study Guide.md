@@ -1,47 +1,27 @@
 # CS180: FINAL STUDY GUIDE					CONNOR JENNISON								 
 
-###### Book Sections: Ch1, 2.1, 2.2, 2.4, Ch 3, 4.1, 4.4, 4.5, 5.1, 5.2, 5.3, 5.4,  6.1, 6.2, 6.3, 6.4, 6.6, 6.8, 7.1, 7.2, 7.5, 7.6, 7.8, 7.9, 7.11, 8.1 
+### Algorithms
 
-### Topics/Problems
-
-- Chapter 1: Introduction
-  - Stable Matching (pg. 1)
-  - Interval Scheduling (pg. 12)
-- Chapter 2: Algorithm Analysis
-  - Computational Tractability (pg. 29)
-  - Asymptotic Order (pg. 35)
-  - Common Running Times (pg. 47)
-- Chapter 3: Graphs
-  - Basic Definitions (pg. 73)
-  - Connectivity and Traversal (pg. 78)
-  - Implementing Traversal (Queues/Stacks) (pg. 87)
-  - Testing Bipartiteness (pg. 94)
-  - Connectivity in Directed Graphs (pg. 97)
-  - Directed Acyclic Graphs/Topological Ordering (pg. 99)
-- Chapter 4: Greedy Algorithms
-  - Interval Scheduling: Greedy Algorithm (pg. 116)
-  - Shortest Paths in a Graph (pg. 137)
-  - Minimum Spanning Tree Problem (pg. 142)
-- Chapter 5: Divide And Conquer
-  - Mergesort Algorithm (pg. 210)
-  - Further Recurrance Relations (pg. 214)
-  - Counting Inversions (pg. 221)
-  - Finding Closest Pair of Points (pg. 225)
-- Chapter 6: Dynamic Programming
-  - Weighted Interval Scheduling: Recursive Procedure (pg. 252)
-  - Principles of Dynamic Programming (pg. 258)
-  - Segmented LEast Squares: Multi-way Choices (pg. 261)
-  - Subset Sums/Knapsacks: Adding a Variable (pg. 266)
-  - Sequence Alignment (pg. 278)
-  - Shortest Paths in a Graph (pg. 290)
-- Chapter 7: Network Flow
-  - Max-Flow Problem/Ford-Fulkerson Algorithm (pg. 338)
-  - Maximum Flows and Minimum Cuts in a Network (pg. 346)
-  - Bipartite Matching Problem (pg. 367)
-  - Disjoint Paths in Directed and Undirected Graphs (pg. 373)
-  - Survey Design (pg. 384)
-- Chapter 8: NP and Computational Intractability
-  - Polynomial-Time Reduction (pg. 459)
+- Stable Matching
+- Interval Scheduling Problem
+- Kahn's Algorithm for Topological Ordering
+- BFS/DFS
+- Greedy Interval Scheduling (Multiple Processors)
+- Dijkstra's Algorithm
+- Kruskal's Algorithm
+- Prim's Algorithm
+- K-Clustering Algorithm
+- Mergesort Algorithm
+- Counting Inversions
+- Closest Pair of Points
+- Weighted Interval Scheduling: Recursive Procedure
+- Segmented Least Squares
+- Knapsack Problem
+- Sequence Alignment
+- Shortest Path in Graph (negative weights too)
+- Ford-Fulkerson
+- Bipartite Matching
+- Disjoint Paths
 
 
 
