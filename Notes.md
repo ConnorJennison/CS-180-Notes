@@ -1853,7 +1853,7 @@ A **vertex cover** is defined as a minimum set of verticies $VS$  in a graph $G$
 
 ###### Prove: $S$ is a maximum independent set if and only if $V-S$ is a vertext cover.
 
-If $S​$ is a maximum independent set, then consider an arbitrary edge $(u,v)​$ in the graph. Either $u​$, $v​$ or both must be in $V-S​$, because both of them can't be in $S​$. This follows for every edge, so we have that $V-S​$ is a vertex cover. 
+If $S$ is a maximum independent set, then consider an arbitrary edge $(u,v)$ in the graph. Either $u$, $v$ or both must be in $V-S$, because both of them can't be in $S$. This follows for every edge, so we have that $V-S$ is a vertex cover. 
 
  If $V-S$ is a vertex cover, then consider two nodes, $u,v \in S$. If they were joined by an edge $e$, then neither of them would be in $V-S$, contradicting the fact that it is a vertex cover. Therefore, no two nodes in $S$ share an edge, and S is a Maximum Independent Set
 

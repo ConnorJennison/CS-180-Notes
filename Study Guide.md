@@ -2,25 +2,25 @@
 
 ### Algorithms
 
-- Stable Matching
-- Interval Scheduling Problem
-- Kahn's Algorithm for Topological Ordering
-- BFS/DFS
-- Dijkstra's Algorithm
-- Kruskal's Algorithm
-- Prim's Algorithm
-- K-Clustering Algorithm
-- Mergesort Algorithm
-- Counting Inversions
+- Stable Matching: $O(n^2)$
+- Interval Scheduling Problem: $O(nlogn)$ with sorting, $O(n)$ pre-sorted
+- Kahn's Algorithm for Topological Ordering: $O(e + v)$ 
+- BFS/DFS: $O(e + v)$ 
+- Dijkstra's Algorithm: $O(n^2)$ or $O(elog(v))$ 
+- Kruskal's Algorithm: $O(e log(v))$ 
+- Prim's Algorithm: $O(elog(v))$ or  $O(v^2)$ 
+- K-Clustering Algorithm: $O(elog(v))$ 
+- Mergesort Algorithm: $O(nlog(n))$ 
+- Counting Inversions: $O(nlog(n))$ 
 - Closest Pair of Points
-- Weighted Interval Scheduling: Recursive Procedure
-- Segmented Least Squares
-- Knapsack Problem
+- Weighted Interval Scheduling: Recursive Procedure: $O(n)$ 
+- Segmented Least Squares: $O(n^3)$ 
+- Knapsack Problem: $O(nC)$ (n for number items, C for size of bag)
 - Sequence Alignment
-- Shortest Path in Graph (negative weights too)
-- Ford-Fulkerson
-- Bipartite Matching
-- Disjoint Paths
+- Shortest Path in Graph (negative weights too): $O(ev)$ 
+- Ford-Fulkerson: $O(mC)$ (M = number of edges, C = maximum flow)
+- Bipartite Matching: $O(mn)$ (m = edges, n = size of sets)
+- Disjoint Paths: $O(mn)$ (m = edges, n = nodes)
 
 
 
@@ -288,7 +288,7 @@ Assume we have the recurrance $T(n) \le qT(\frac{n}{2}) +c$
 ###### <u>Finding Closest Pair of Points</u>
 
 - We do this by using mergesort in the following way
-  - Recursively find the closest pair among the "left half" of points and the "right half" of points, then use informatino to get rest of solution.
+  - Recursively find the closest pair among the "left half" of points and the "right half" of points, then use informatinon to get rest of solution.
 
 
 
