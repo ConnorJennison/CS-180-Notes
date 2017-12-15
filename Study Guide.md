@@ -271,3 +271,49 @@ While $\exists$ an unmatched man...
 
 
 ### Chapter 5: Divide and Conquer
+
+###### <u>Mergesort Algorithm</u>
+
+- Merging: keep a pointer and compare values at pointer until merged
+
+  - Arays must be sorted
+  - Time complexity: $O(n+m)$ 
+
+- Recurrance relation for mergesort
+
+  - $$
+    T(n) = 2 T(\frac{n}{2}) + cn  
+    \\ \vdots \\
+    T(n) = 2^i T(\frac{n}{2^i}) + icn
+    $$
+
+  - Solving $\frac{n}{2^i} = 1$ gives that $i=log(n)$, so we get $O(nlogn)$ 
+
+
+
+###### <u>Further Recurrance Relations</u>
+
+Assume we have the recurrance $T(n) \le qT(\frac{n}{2}) +c$
+
+- If q > 2, this problem is bounded by $O(n^{log_2(q)})$ 
+- If q = 1, this problem is bounded by $O(n)$ 
+
+
+
+###### <u>Counting Inversions</u>
+
+- Do the mergesort algorithm, splitting into left half $A$ and right half $B$ with caveat. 
+  - If when we merge, the element in $B$ is first, increment $count$ by the number of elements yet to be considered in $A$. 
+- By doing this, we count inversions by counting every time numbers switch. 
+
+
+
+###### <u>Finding Closest Pair of Points</u>
+
+- We do this by using mergesort in the following way
+  - Recursively find the closest pair among the "left half" of points and the "right half" of points, then use informatino to get rest of solution.
+
+
+
+
+
