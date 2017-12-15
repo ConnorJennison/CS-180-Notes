@@ -40,8 +40,6 @@
   - Bipartite Matching Problem (pg. 367)
   - Disjoint Paths in Directed and Undirected Graphs (pg. 373)
   - Survey Design (pg. 384)
-  - Airline Scheuduling (pg. 387)
-  - Project Selection (pg. 396)
 - Chapter 8: NP and Computational Intractability
   - Polynomial-Time Reduction (pg. 459)
 
@@ -418,7 +416,7 @@ Find the largest increasing subsequence (not necesarrily contiguous)
 
 Assume that for each of the first $i$ elements of the sequence, we know the optimal solution. We now want to find the optimal solution for the first $i+1$ points. We have two cases to consider
 
-- $x_{i+1}​$ is not in the solutions
+- $x_{i+1}$ is not in the solutions
   - the optimal solution up to $x_i$ is the same as the optimal solution up to $x_{i+1}$ 
 - $x_{i+1}$ may be in the solution
   - for each of the the optimal soutions at $x_k$ in  $x_1, \ldots, x_i$ 
@@ -430,3 +428,107 @@ Assume that for each of the first $i$ elements of the sequence, we know the opti
 
 ### Chapter 7: Network Flow
 
+###### <u>Max Flow/Ford-Fulkerson</u>
+
+- Conditions for Network Graph
+
+  - For each $e \in E$, we have $0 \le f(e) \le c_e$ 
+  - For each node $v$ other than $s$ and $t$, we have $\underset{\text{e into v}}{\sum}f(e) = \underset{\text{e out of v}}{\sum}f(e)$ 
+
+- Residual Graph
+
+  - Node set of residual graph $G_f$ is the same as that of $G$ 
+  - For each edge $e=(u,v)$ of $G$ on which $f(e)<c_e$, we include a <u>forward edge</u> of capacity $c_e - f(e)$ to represent leftover units we can sitll push
+  - For each edge $e = (u,v)$ of $G$ on which $f(e) > 0$, we include a <u>backward edge</u> of capacity $f(e)$ to represent how many units of flow we have pushed. 
+
+- **Ford-Fulkerson Algorithm**
+
+  ```
+  Initially, f(e) = 0 for all e in G
+  While there is a simple s-t path in G_f
+  	Denote this path as P
+  	Find the bottleneck of that path (minimum residual capacity)
+  	Send that much flow through every edge on the path
+  Endwhile
+  Return 
+  ```
+
+​			
+​		
+
+###### <u>Max Flows/Min Cuts in a Network</u>
+
+- Cut definition
+  - Split network to two sets $A,B$ s.t. $s \in A$ and $t \in B$ 
+  - An **s-t cut** is defined as $c(A,B) = \underset{\text{e out of A}}{\sum}c_e$ 
+- The size of the max flow is also the size of the min cut, therefore, we can use **Ford-Fulkerson** to find the size of the min cut. 
+- **MIN CUT FINDING ALGORITHM**
+  - Perform Ford-Fulkerson on a network
+  - Denote $A^*$ as all the nodes reachable by $s$ in the residual graph
+  - Denote $B^*$ as all other nodes
+  - Return $(A^*,B^*)$
+
+
+
+###### <u>Bipartite Matching Problem</u>
+
+- Given two bipartite groups, $A$ and $B$ 
+- Direct all edges from $A$ to $B$ 
+- Create a source, $s$, and create an edge $(s,a_i)$ for each $a_i \in A$ 
+- Create a sink, $t$, and create an edge $(b_i,t)$ for each $b_i \in B$ 
+- Every edge has capacity 1
+- Find max-flow using Ford-Fulkerson, max-flow corresponds to maximum matches
+
+
+
+###### <u>Disjoint Paths in Directed/Undirected Graphs</u>
+
+- Problem: Find maximum number of edge disjoint paths in a graph
+- Two paths are **edge disjoint** if none of them share edges
+- Algorithm
+  - Denote two nodes as source/sink
+  - Make the capacity of all edges in the flow network 1
+  - Run Ford-Fulkrson
+
+
+
+###### <u>Circulations</u>
+
+- Conditions: Graph with lower bounds
+  - (Capacity Condition) For each $e \in E$, we have $l_e \le f(e) \le c_e$ (lower bount)
+  - (Demand Condition) For each $v \in V$, we have $f^{in}(v) - f^{out}(v) = d_v$ 
+  - For a circulation, we have $\sum_{v \in V} d_v = 0$ or $\sum_{d_v < 0} -d_v = \sum_{d_v > 0} d_v$ 
+- To get rid of lower bounds:
+  - Subtract the capacity by the lower bound
+  - Add the lower bound to the beginning node
+  - Subtract the lower bound to the ending node
+
+
+
+###### <u>Survey Modeling</u>
+
+- Model the graph like so
+  - edges of capacity $c_i, c_i'$ from source to customer representing how many products they are asked about
+  - edges of capacity 0,1 from customer to product to see if they've ever used it
+  - edges of capacity $p_i, p'_i$ from product to sink representing how many people answered about this product
+
+
+
+### Chapter 8: NP and Computational Intractability
+
+-  $ y \le_p x$ implies
+  - $x$ is at least as hard as $y$ 
+  - if $y$ is NP-HARD, so is $x$
+  - if $x$ can be solved in polynomial time, so can $y$ 
+- How to use this definition
+  - Start from an NP-Hard problem $y$ and show $x$ is NP-Hard. 
+  - Show that an arbitrary instance of $y$ can be solved by a "black-box" that solves $x$. 
+- Thm: $S$ is a independent set iff $V-S$ is a vertex cover
+  - Proof: —> for any edge, at least one of the nodes must be in $V-S$ 
+  - Proof: <— if two nodes in $S$ shared edge, violates verte cover, so $S$ is independent set
+- Definition
+  - A **vertex cover** is defined as a minimum set of verticies $VS$  in a graph $G$ such that every edge $e$ has at least one end in $VC$. PROV
+- NP-Completeness of Independent Set/Vertex Cover/Set Cover
+  - $IS \le_p VC \le_p IS$ 
+  - $VC \le_p SC$ 
+  - IS = Independent Set, VC = Vertex Cover, SC = Set Cover

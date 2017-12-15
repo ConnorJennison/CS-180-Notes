@@ -1861,7 +1861,7 @@ If $S$ is a maximum independent set, then consider an arbitrary edge $(u,v)$ in 
 
 ###### <u>Showing NP-Complete:</u>
 
-Now we will show that $MIS \le_p VC$ 
+Now we will show that $MIS \le_p VC​$ 
 
 We start from an arbitrary instance of $MIS$ and show that a blackbox that can solve $VC$ can solve $MIS$. Because of the infromation in the previous example, we can do this transformation. 
 
