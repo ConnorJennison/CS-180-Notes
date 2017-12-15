@@ -315,5 +315,118 @@ Assume we have the recurrance $T(n) \le qT(\frac{n}{2}) +c$
 
 
 
+### Chapter 6: Dynamic Programming
 
+###### <u>Weighted Interval Scheduling: Recursive Procedure</u>
+
+We start with a couple of assumptions
+
+- Up to a certain coordinate $x_i$, we must know the optimal solution from the beginning to $x_i$ 
+- For any $x_j < x_i$, we must know the optimal solution from the beginning to $x_j$ 
+
+If there is an interval $I_j$ such that it overlaps and goes past $x_j$ then we compute two assumptions
+
+- $I_j \notin S$ (solution)
+  - $S_j = S_{j-1}$ 
+
+
+- $I_j \in S$
+  - $S_k = S_{l_{j}} + w_j$ 
+  - $S_{l_j}$ refers to the solution at $x_i$, the first ex coordinate before the beginning of $j$ 
+
+We store all of the tentative solutions that we build up, and once we get to the end, we backtrack to find the optimal solution. 
+
+
+
+###### <u>Principles of Dynamic Programming</u>
+
+- We split the problem into multiple subsets
+- The subsets are not necessarily disjoint
+- For each subproblem, we get an optimal solution, then combine these to get a solution to the problem as a whole. 
+  - Continue to do this recursively until each subproblem is small enough
+- ALSO: Good way to think is that problems have a certain number of parameters we can optimize over. 
+
+
+
+###### <u>Segmented Least Squares: Multi-way Choices</u>
+
+- We have that $OPT(j)  = \underset{1 \le 1 \le j}{min} (e_{i,j} + C + OPT(i-1))$ 
+- Basically, we start at bottom and for a given solution, we try to draw a new line from a point $i$ to $j$ and then see which has the smallest error
+- $O(n^3)$ 
+
+
+
+###### <u>Subset Sums/Knapsacks: Adding a Variable</u>
+
+We are given a knapsack with size $S$. We have many items of different values, and sizes: $I_k = (s_k, v_k)$. There is an unlimited amount of each of the given items. Our goal is to place items in the knapsack such that we have the maximum size.
+
+
+
+What parameters do we have that we can use dynamic programming on
+
+- Number of items
+- Size of knapsack
+
+We have a table below that shows the Size of the knapsack against which items we are considering. We want to use dynamic programming to fill out each cell. 
+
+|                 | **S = 1** | S = 2 | S = 3 | $\ldots$ | S = n |
+| --------------- | :-------: | :---: | :---: | :------: | :---: |
+| **Only Item 1** |           |       |       |          |       |
+| **Add Item 2**  |           |       |       |          |       |
+| $\vdots$        |           |       |       |          |       |
+
+In our algorithm, we will fill 
+
+- For item $j$, for knapsack size $i$ 
+  - Item $j \in S$
+    - Denote $v_x$ as the value at item $j$, index $i - S_j$ 
+    - $S_{i,j} = v_x + v_j$ 
+  - Item $j \notin S$
+    - $S_{i,j} = $ $S_{i,j-1}$
+  - Take $S_{i,j}$ as the maximum of these two values. 
+- Eventually, we will have the value for all items and knapsack size $S$ 
+- The comparisons in each value of the array take constant time, so for this algorithm we have $O(nC)$ 
+  - This is not polynomial because we have two different variables that the order depends on, but we could have, for example, $C = 2^n$ 
+  - We call functions of this type **pseudo-poynomial**. 
+
+
+
+###### <u>Shortest Path in a Graph</u>
+
+- **Bellman-Ford Algorithm**: want to find minimum $s-t$ path. 
+
+- Denote the shortest $v-t$ path of at most length $i$ as OPT(i,v)
+
+  - $OPT(i,v) = \min(OPT(i-1,v), \underset{w \in V}{\min}(OPT(i-1,w) + c_{vw}))$
+
+- Build a matrix of the verticies, return $OPT(n-1,s)$. 
+
+- Runs in $O(ev)$ time. 
+
+   
+
+###### <u>Subsequence Problem</u>
+
+We are given a sequence of <u>unique</u> integers. We define the following
+
+- A subsequence is <u>increasing</u> if for all $i,j$ in the subsequence such that $i < j$, $S_i < S_j$ 
+- A subsequence is <u>contiguous</u> if all elements in the subsequence are adjacent and in the same order as in the regular sequence
+
+Find the largest increasing subsequence (not necesarrily contiguous)
+
+
+
+Assume that for each of the first $i$ elements of the sequence, we know the optimal solution. We now want to find the optimal solution for the first $i+1$ points. We have two cases to consider
+
+- $x_{i+1}​$ is not in the solutions
+  - the optimal solution up to $x_i$ is the same as the optimal solution up to $x_{i+1}$ 
+- $x_{i+1}$ may be in the solution
+  - for each of the the optimal soutions at $x_k$ in  $x_1, \ldots, x_i$ 
+    - if $x_{i+1} > x_k$ 
+      - add 1 to the solution corresponding to $x_k$ 
+  - denote the optimal solution in this case as the 
+
+###### 
+
+### Chapter 7: Network Flow
 
