@@ -6,7 +6,6 @@
 - Interval Scheduling Problem
 - Kahn's Algorithm for Topological Ordering
 - BFS/DFS
-- Greedy Interval Scheduling (Multiple Processors)
 - Dijkstra's Algorithm
 - Kruskal's Algorithm
 - Prim's Algorithm
