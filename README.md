@@ -9,4 +9,4 @@ measures including time and space, upper and lower bounds, asymptotic complexity
 NP-completeness, use of randomness. If time permits, I will present advanced topics,
 such as PSPACE and other complexity classes.
 
-These are my notes.  Use it at your own risk.
+These are my notes.  Material for current course may be different. Use at your own risk
